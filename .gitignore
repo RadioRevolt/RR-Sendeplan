@@ -123,3 +123,6 @@ tags
 
 ### JetBrains ###
 .idea/
+
+### Application specific ###
+settings.yaml

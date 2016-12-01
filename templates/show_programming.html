@@ -1,0 +1,37 @@
+<html>
+    <head>
+        <title>Sendeplanen til Radio Revolt</title>
+    </head>
+
+    <body>
+        <h2>Sendeplanen til Radio Revolt</h2>
+
+        <p>Nedenfor ser du sendeplanen til Radio Revolt denne uka.</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Tid</th>
+                    <th>Mandag</th>
+                    <th>Tirsdag</th>
+                    <th>Onsdag</th>
+                    <th>Torsdag</th>
+                    <th>Fredag</th>
+                    <th>Lørdag</th>
+                    <th>Søndag</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for hour in hours %}
+                <tr>
+                    <td>{{ "%02d" | format(loop.index0) }}:00</td>
+                    {% for day in hour %}
+                    <td>{{day}}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </body>
+</html>
