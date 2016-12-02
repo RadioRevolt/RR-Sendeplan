@@ -128,4 +128,4 @@ tags
 settings.yaml
 rr-sendeplan.conf
 rr-sendeplan.service
-start_sendeplan
+start-sendeplan
