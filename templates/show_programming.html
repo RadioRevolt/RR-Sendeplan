@@ -9,7 +9,7 @@
         <link rel='stylesheet' type='text/css' href='{{ url_for('static', filename='bootstrap.css') }}' />
     </head>
 
-    <body>
+    <body style="padding: 3px">
         <header>
             <h2>Sendeplanen til Radio Revolt</h2>
 
@@ -19,7 +19,7 @@
                 <ul>
                     {%- for week in possible_weeks %}
                     {%- if week == rel_week %}
-                    <li><b>{{week}}</b> (<a href="{{ url_for('programming_week_csv', rel_week=week) }}">Last ned som regneark</a>)</li>
+                    <li><strong>{{week}}</strong> (<a href="{{ url_for('programming_week_csv', rel_week=week) }}">Last ned som regneark</a>)</li>
                     {%- else %}
                     <li><a href="{{ url_for('programming_week', rel_week=week) }}">{{week}}</a></li>
                     {%- endif %}
@@ -30,6 +30,16 @@
 
         <main>
             <h3>Sendeplan</h3>
+            {%- if "Ikke tilgjengelig" in hours[1] %}
+            <p><strong>En eller flere timer i en eller flere dager mangler informasjon</strong>. Dette kan skje fordi:</p>
+            <ul>
+                <li>Det er ingen sending i autoavvikler som starter ved midnatt, kontakt i så fall radioteknisk.</li>
+                <li>Dagen er ikke generert ennå. Den genereres når du åpner den i DigAIRange.</li>
+                <li>Det er ingen Day Template som passer til dagen (du kan observere dette ved at dagen er tom når du åpner den i DigAIRange).
+                    Da må radioteknisk settes på saken.</li>
+            </ul>
+            {%- endif %}
+            <div class="table-responsive">
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -54,16 +64,7 @@
                     {%- endfor %}
                 </tbody>
             </table>
-
-            {%- if "Ikke tilgjengelig" in hours[1] %}
-            <p>En eller flere timer i en eller flere dager mangler informasjon. Dette kan skje fordi:</p>
-            <ul>
-                <li>Det er ingen sending i autoavvikler som starter ved midnatt, kontakt i så fall radioteknisk.</li>
-                <li>Dagen er ikke generert ennå. Den genereres når du åpner den i DigAIRange.</li>
-                <li>Det er ingen Day Template som passer til dagen (du kan observere dette ved at dagen er tom når du åpner den i DigAIRange).
-                    Da må radioteknisk settes på saken.</li>
-            </ul>
-            {%- endif %}
+        </div>
         </main>
     </body>
 </html>
