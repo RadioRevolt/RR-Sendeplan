@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
     <head>
         <title>Sendeplanen til Radio Revolt</title>
@@ -6,19 +7,30 @@
     <body>
         <h2>Sendeplanen til Radio Revolt</h2>
 
-        <p>Nedenfor ser du sendeplanen til Radio Revolt denne uka.</p>
+        <h3>Velg uke (relativ til nåværende)</h3>
+
+        <nav>
+            <ul>
+                {% for week in possible_weeks %}
+                {% if week == rel_week %}
+                <li><b>{{week}}</b></li>
+                {% else %}
+                <li><a href="{{ url_for('programming_week', rel_week=week) }}">{{week}}</a></li>
+                {% endif %}
+                {% endfor %}
+            </ul>
+        </nav>
 
         <table>
             <thead>
                 <tr>
                     <th>Tid</th>
-                    <th>Mandag</th>
-                    <th>Tirsdag</th>
-                    <th>Onsdag</th>
-                    <th>Torsdag</th>
-                    <th>Fredag</th>
-                    <th>Lørdag</th>
-                    <th>Søndag</th>
+                    {% set days = ('Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag', 'Søndag') %}
+                    {% set months = ('januar', 'februar', 'mars', 'april', 'mai', 'juni', 'juli', 'august', 'september', 'oktober', 'november', 'desember') %}
+                    {% for i in range(7) %}
+                    {% set this_date = first_date + (i * one_day) %}
+                    <th>{{ days[i] }} {{ this_date.day }}. {{ months[this_date.month - 1] }} {{ this_date.year }}</th>
+                    {% endfor %}
                 </tr>
             </thead>
 

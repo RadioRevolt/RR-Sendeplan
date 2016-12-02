@@ -68,7 +68,7 @@ def programming_week(rel_week):
     last_monday = get_last_monday()
     desired_monday = (datetime.timedelta(days=7) * rel_week) + last_monday
     hours = get_week_schedule(desired_monday)
-    resp = make_response(render_template('show_programming.html', hours=hours, first_date=desired_monday))
+    resp = make_response(render_template('show_programming.html', hours=hours, first_date=desired_monday, rel_week=rel_week, possible_weeks=list(range(-3, 3)), one_day=datetime.timedelta(days=1)))
     return prepare_response(resp)
 
 @app.route("/")
