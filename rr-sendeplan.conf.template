@@ -8,4 +8,4 @@ respawn
 respawn limit 5 10 # stop respawning if crashing too fast
 
 setuid <username>
-exec <path>/start_sendeplan # change as needed
+exec <path>/start-sendeplan # change as needed
