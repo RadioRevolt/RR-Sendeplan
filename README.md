@@ -19,11 +19,11 @@ Som alle andre Python-ting, egentlig.
 4. Installer avhengigheter: `pip install -r requirements.txt`
 5. Åpne `settings.yaml.template` og fyll inn manglende innstillinger. Lagre som `settings.yaml`
    (i Vim gjør du dette ved å skrive `:w settings.yaml`)
-6. Lag en ny bruker som skal kjøre denne applikasjonen.
+6. Lag en ny bruker som skal kjøre denne applikasjonen, `sudo useradd rr-sendeplan`.
 7. Åpne `rr-sendeplan.conf.template` og fyll inn manglende variabler der. Lagre som `rr-sendeplan.conf`.
 8. Åpne `start-rr-sendeplan.template` og fyll inn manglende variabler der. Lagre som `start-sendeplan`.
 9. Sørg for at fila `start-sendeplan` er kjørbar for brukeren du lagde i steg 6.
-10. Kopier `rr-sendeplan.conf` inn i `/etc/init.d` (krever sudo!)
+10. Kopier `rr-sendeplan.conf` inn i `/etc/init` (krever sudo!)
 11. Start rr-sendeplan ved å kjøre `sudo service rr-sendeplan start`.
 12. Åpne `rr-sendeplan-apache.conf` og fyll inn manglende variabler der. Lagre som `rr-sendeplan-apache.conf`.
 13. Kopier `rr-sendeplan-apache.conf` inn i `/etc/apache2/sites-available` eller integrer den i konfigurasjonen
