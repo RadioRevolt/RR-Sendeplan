@@ -14,7 +14,7 @@
                 <ul>
                     {%- for week in possible_weeks %}
                     {%- if week == rel_week %}
-                    <li><b>{{week}}</b></li>
+                    <li><b>{{week}}</b> (<a href="{{ url_for('programming_week_csv', rel_week=week) }}">Last ned som regneark</a>)</li>
                     {%- else %}
                     <li><a href="{{ url_for('programming_week', rel_week=week) }}">{{week}}</a></li>
                     {%- endif %}

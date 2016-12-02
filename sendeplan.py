@@ -1,4 +1,6 @@
 import datetime
+import csv
+import io
 
 from flask import Flask, render_template, make_response, abort, redirect, url_for
 from werkzeug.contrib.fixers import ProxyFix
@@ -99,6 +101,13 @@ def prepare_response(resp):
 
 @app.route("/<rel_week>")
 def programming_week(rel_week):
+    rel_week = parse_rel_week(rel_week)
+    desired_monday = get_monday(rel_week)
+    hours = get_week_schedule(desired_monday)
+    resp = make_response(render_template('show_programming.html', hours=hours, first_date=desired_monday, rel_week=rel_week, possible_weeks=list(range(-3, 3)), one_day=datetime.timedelta(days=1)))
+    return prepare_response(resp)
+
+def parse_rel_week(rel_week):
     # Is the rel_week within bounds?
     try:
         rel_week = int(rel_week)
@@ -106,15 +115,37 @@ def programming_week(rel_week):
         abort(404)
     if not (-3 <= rel_week <= 2):
         abort(404)
+    return rel_week
+
+def get_monday(rel_week):
     last_monday = get_last_monday()
     desired_monday = (datetime.timedelta(days=7) * rel_week) + last_monday
-    hours = get_week_schedule(desired_monday)
-    resp = make_response(render_template('show_programming.html', hours=hours, first_date=desired_monday, rel_week=rel_week, possible_weeks=list(range(-3, 3)), one_day=datetime.timedelta(days=1)))
-    return prepare_response(resp)
+    return desired_monday
 
 @app.route("/")
 def programming_default():
     return redirect(url_for('programming_week', rel_week=0))
+
+@app.route("/<rel_week>.csv")
+def programming_week_csv(rel_week):
+    rel_week = parse_rel_week(rel_week)
+    desired_monday = get_monday(rel_week)
+    hours = get_week_schedule(desired_monday)
+    hours.insert(0, ['Tid', 'Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag', 'Søndag'])
+    # Insert hours into the first element of each list
+    for i, hour in enumerate(hours[1:]):
+        hour.insert(0, "%02d00-%02d00" % (i, i+1))
+    # Write the csv file
+    with io.StringIO(newline='') as fp:
+        writer = csv.writer(fp)
+        writer.writerows(hours)
+        document = fp.getvalue()
+    # Prepare the response
+    resp = make_response(document)
+    resp = prepare_response(resp)
+    resp.headers['Content-Type'] = 'text/csv'
+    return resp
+
 
 def fetch_data_from_api(first_date):
     datas = []
