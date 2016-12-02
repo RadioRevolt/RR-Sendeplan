@@ -1,0 +1,11 @@
+[Unit]
+Description=Simple web application for displaying the program schedule for Radio Revolt
+
+[Service]
+Type=simple
+User=<username>
+ExecStart=<path>/start_sendeplan
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
