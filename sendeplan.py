@@ -1,6 +1,6 @@
 import datetime
 
-from flask import Flask, render_template, make_response
+from flask import Flask, render_template, make_response, abort, redirect, url_for
 import requests
 from yaml import load
 
@@ -13,9 +13,8 @@ def load_configuration(configfile):
 
 API_URL = load_configuration("settings.yaml")
 
-@app.route("/")
-def programming():
-    datas = fetch_data_from_api(get_last_monday())
+def get_week_schedule(monday):
+    datas = fetch_data_from_api(monday)
     days = []
     for data in datas:
         program_start_hours = dict()
@@ -48,14 +47,33 @@ def programming():
         for day in range(7):
             programs.append(days[day][hour])
         new_times.append(programs)
-    
-    # Enable caching
-    resp = make_response(render_template('show_programming.html', hours=new_times))
+    return new_times
+
+def prepare_response(resp):
     # Store for 5 minutes
     resp.cache_control.max_age = int(datetime.timedelta(minutes=5).total_seconds())
     # Everyone can cache it
     resp.cache_control.public = True
     return resp
+
+@app.route("/<rel_week>")
+def programming_week(rel_week):
+    # Is the rel_week within bounds?
+    try:
+        rel_week = int(rel_week)
+    except ValueError:
+        abort(404)
+    if not (-3 <= rel_week <= 2):
+        abort(404)
+    last_monday = get_last_monday()
+    desired_monday = (datetime.timedelta(days=7) * rel_week) + last_monday
+    hours = get_week_schedule(desired_monday)
+    resp = make_response(render_template('show_programming.html', hours=hours, first_date=desired_monday))
+    return prepare_response(resp)
+
+@app.route("/")
+def programming_default():
+    return redirect(url_for('programming_week', rel_week=0))
 
 def fetch_data_from_api(first_date):
     datas = []
