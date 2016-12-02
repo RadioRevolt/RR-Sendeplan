@@ -49,6 +49,16 @@
                     {%- endfor %}
                 </tbody>
             </table>
+
+            {%- if "Ikke tilgjengelig" in hours[1] %}
+            <p>En eller flere timer i en eller flere dager mangler informasjon. Dette kan skje fordi:</p>
+            <ul>
+                <li>Det er ingen sending i autoavvikler som starter ved midnatt, kontakt i så fall radioteknisk.</li>
+                <li>Dagen er ikke generert ennå. Den genereres når du åpner den i DigAIRange.</li>
+                <li>Det er ingen Day Template som passer til dagen (du kan observere dette ved at dagen er tom når du åpner den i DigAIRange).
+                    Da må radioteknisk settes på saken.</li>
+            </ul>
+            {%- endif %}
         </main>
     </body>
 </html>
