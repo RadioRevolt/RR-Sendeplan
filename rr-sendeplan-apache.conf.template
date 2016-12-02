@@ -26,7 +26,17 @@
     LoadModule proxy_module <module-path>/mod_proxy.so
     LoadModule proxy_http_module <module-path>/mod_proxy_http.so
 
+    LoadModule headers_module <module-path>/mod_headers.so
+    # Apply the following only to the part of the application that is proxied
+    # (change the path if RR-Sendeplan is accessed somewhere else)
+    <location "/">
+        # Make sure we add a header telling where the script is mounted (replace / with that)
+        RequestHeader set X-Script-Name /
+    </location>
+        
+
     # Replace <port> with the port specified in start-sendeplan (that is, the port RR-Sendeplan actually runs at)
+    # Replace "/" with the place where the application can be accessed ("/" is correct if the application has its own subdomain)
     ProxyPass "/" "http://localhost:<port>/"
     ProxyPassReverse "/" "http://localhost:<port>/"
 </VirtualHost>
