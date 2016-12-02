@@ -1,6 +1,6 @@
 import datetime
 
-from flask import Flask, render_template
+from flask import Flask, render_template, make_response
 import requests
 from yaml import load
 
@@ -49,7 +49,13 @@ def programming():
             programs.append(days[day][hour])
         new_times.append(programs)
     
-    return render_template('show_programming.html', hours=new_times)
+    # Enable caching
+    resp = make_response(render_template('show_programming.html', hours=new_times))
+    # Store for 5 minutes
+    resp.cache_control.max_age = int(datetime.timedelta(minutes=5).total_seconds())
+    # Everyone can cache it
+    resp.cache_control.public = True
+    return resp
 
 def fetch_data_from_api(first_date):
     datas = []
