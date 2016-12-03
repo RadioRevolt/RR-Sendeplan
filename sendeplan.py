@@ -52,9 +52,9 @@ app.wsgi_app = ReverseProxied(app.wsgi_app)
 def load_configuration(configfile):
     with open(configfile, "rb") as fp:
         data = load(fp)
-    return data['url']
+    return (data['url'], -data['weeks_back'], data['weeks_forward'])
 
-API_URL = load_configuration("settings.yaml")
+API_URL, WEEKS_BACK, WEEKS_FORWARD = load_configuration("settings.yaml")
 
 def get_week_schedule(monday):
     datas = fetch_data_from_api(monday)
@@ -104,7 +104,13 @@ def programming_week(rel_week):
     rel_week = parse_rel_week(rel_week)
     desired_monday = get_monday(rel_week)
     hours = get_week_schedule(desired_monday)
-    resp = make_response(render_template('show_programming.html', hours=hours, first_date=desired_monday, rel_week=rel_week, possible_weeks=list(range(-3, 3)), one_day=datetime.timedelta(days=1)))
+    resp = make_response(render_template('show_programming.html', 
+        hours=hours, 
+        first_date=desired_monday, 
+        rel_week=rel_week, 
+        possible_weeks=list(range(WEEKS_BACK, WEEKS_FORWARD + 1)), 
+        one_day=datetime.timedelta(days=1)
+    ))
     return prepare_response(resp)
 
 def parse_rel_week(rel_week):
@@ -113,7 +119,7 @@ def parse_rel_week(rel_week):
         rel_week = int(rel_week)
     except ValueError:
         abort(404)
-    if not (-3 <= rel_week <= 2):
+    if not (WEEKS_BACK <= rel_week <= WEEKS_FORWARD):
         abort(404)
     return rel_week
 

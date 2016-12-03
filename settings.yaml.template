@@ -1,2 +1,13 @@
+# Configuration for RR-Sendeplan
+# Remember to restart rr-sendeplan whenever you make changes to this file.
+# Check that the application succeeds at starting, since errors here may
+# stop the application from starting.
+
 # URL to the base of the Radio REST API
 url: http://example.com/v1
+
+# Number of weeks you can go back
+weeks_back: 3
+
+# Number of weeks you can go forward
+weeks_forward: 2
