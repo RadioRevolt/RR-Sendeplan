@@ -4,7 +4,7 @@ Description=Simple web application for displaying the program schedule for Radio
 [Service]
 Type=simple
 User=<username>
-ExecStart=<path>/start_sendeplan
+ExecStart=<path>/start-sendeplan
 Restart=always
 
 [Install]
