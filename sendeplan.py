@@ -109,7 +109,8 @@ def programming_week(rel_week):
         first_date=desired_monday, 
         rel_week=rel_week, 
         possible_weeks=list(range(WEEKS_BACK, WEEKS_FORWARD + 1)), 
-        one_day=datetime.timedelta(days=1)
+        one_day=datetime.timedelta(days=1),
+        now=datetime.datetime.now()
     ))
     return prepare_response(resp)
 

@@ -1,3 +1,5 @@
+{%- set days = ('Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag', 'Søndag') %}
+{%- set months = ('januar', 'februar', 'mars', 'april', 'mai', 'juni', 'juli', 'august', 'september', 'oktober', 'november', 'desember') %}
 <!DOCTYPE html>
 <html>
     <head>
@@ -7,6 +9,20 @@
 
         <title>Sendeplanen til Radio Revolt</title>
         <link rel='stylesheet' type='text/css' href='{{ url_for('static', filename='bootstrap.css') }}' />
+
+        <style>
+.alert-warning {
+    border-width: 1px 1px 1px 4px;
+    border-style: solid;
+    border-color: #f0ad4e;
+    border-radius: 3px;
+    background-color: #fff0da;
+    padding-left: 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+</style>
     </head>
 
     <body style="padding: 3px">
@@ -30,22 +46,23 @@
 
         <main>
             <h3>Sendeplan</h3>
+            <p><em>Data sist hentet {{ now.strftime("%d.%m.%Y %H:%M") }} (ny oppdatering hvert 5. minutt)</em></p>
             {%- if "Ikke tilgjengelig" in hours[1] %}
-            <p><strong>En eller flere timer i en eller flere dager mangler informasjon</strong>. Dette kan skje fordi:</p>
-            <ul>
-                <li>Det er ingen sending i autoavvikler som starter ved midnatt, kontakt i så fall radioteknisk.</li>
-                <li>Dagen er ikke generert ennå. Den genereres når du åpner den i DigAIRange.</li>
-                <li>Det er ingen Day Template som passer til dagen (du kan observere dette ved at dagen er tom når du åpner den i DigAIRange).
-                    Da må radioteknisk settes på saken.</li>
-            </ul>
+            <div class="alert alert-warning" role="alert">
+                <p><strong>En eller flere timer i en eller flere dager mangler informasjon</strong>. Dette kan skje fordi:</p>
+                <ul>
+                    <li>Det er ingen sending i autoavvikler som starter ved midnatt, kontakt i så fall radioteknisk.</li>
+                    <li>Dagen er ikke generert ennå. Den genereres når du åpner den i DigAIRange.</li>
+                    <li>Det er ingen Day Template som passer til dagen (du kan observere dette ved at dagen er tom når du åpner den i DigAIRange).
+                        Da må radioteknisk settes på saken.</li>
+                </ul>
+            </div>
             {%- endif %}
             <div class="table-responsive">
             <table class="table table-striped">
                 <thead>
                     <tr>
                         <th>Tid</th>
-                        {%- set days = ('Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag', 'Søndag') %}
-                        {%- set months = ('januar', 'februar', 'mars', 'april', 'mai', 'juni', 'juli', 'august', 'september', 'oktober', 'november', 'desember') %}
                         {%- for i in range(7) %}
                         {%- set this_date = first_date + (i * one_day) %}
                         <th>{{ days[i] }} {{ this_date.day }}. {{ months[this_date.month - 1] }} {{ this_date.year }}</th>
