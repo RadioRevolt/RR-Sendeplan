@@ -1,0 +1,29 @@
+// The following assumes you've set up a cache directory for nginx in /var/cache
+uwsgi_cache_path /var/cache/nginx/sendeplan.radiorevolt.no
+    levels=1:2 
+    keys_zone=sendeplan_cache:10m 
+    max_size=2g 
+    inactive=60m 
+    use_temp_path=off;
+
+server {
+    // Set the port you want RR-Sendeplan to be available on here
+    listen 8003;
+    listen [::]:8003;
+
+    uwsgi_cache sendeplan_cache;
+    uwsgi_cache_use_stale error timeout http_500 http_503 updating;
+    uwsgi_cache_lock on;
+    uwsgi_cache_key $uri;
+
+    location / {
+	include uwsgi_params;
+        uwsgi_pass unix:/var/run/rr-sendeplan/uwsgi.sock;
+    }
+
+    location /static/ {
+        // Set the path to the application:
+        alias /PATH/TO/RR-Sendeplan/static/;
+        autoindex off;
+    }
+}

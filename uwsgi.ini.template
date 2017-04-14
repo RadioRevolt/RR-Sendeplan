@@ -1,0 +1,13 @@
+[uwsgi]
+module = sendeplan:app
+
+master = true
+; Decide on the amount of workers + 1:
+processes = 3
+
+socket = /var/run/rr-sendeplan/uwsgi.sock
+chmod-socket = 666
+
+vacuum = true
+
+die-on-term = true

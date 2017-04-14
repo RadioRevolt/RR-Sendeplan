@@ -47,16 +47,15 @@ er usikker.
 9.  Åpne `rr-sendeplan.conf.template` og fyll inn manglende variabler der (hvis 
     du bruker upstart; gjør det samme med `rr-sendeplan.service.template` hvis du bruker 
     SystemD). Lagre som `rr-sendeplan.conf` (`rr-sendeplan.service` hvis du bruker SystemD).
+10. Lag en mappe i `/var/run` for socketen, kalt rr-sendeplan, og gi `rr-sendeplan` rettigheter til å skrive her.
 10. Åpne `start-sendeplan.template` og fyll inn manglende variabler der. Lagre som `start-sendeplan`.
 11. Sørg for at fila `start-sendeplan` er kjørbar for brukeren du lagde i steg 8: `chmod g-w,g+x start-sendeplan; sudo chgrp rr-sendeplan start-sendeplan`
 12. Kopier `rr-sendeplan.conf` inn i `/etc/init` (krever sudo!) hvis du bruker Upstart,
     kopier `rr-sendeplan.service` inn i `/etc/systemd/system` og kjør `sudo systemctl enable rr-sendeplan` hvis du bruker SystemD (kopiering gjøres med `cp`).
 13. Start rr-sendeplan ved å kjøre `sudo service rr-sendeplan start` hvis du bruker Upstart, `sudo systemctl start rr-sendeplan` hvis du bruker SystemD.
-14. Åpne `rr-sendeplan-apache.conf` og fyll inn manglende variabler der. Lagre som `rr-sendeplan-apache.conf`.
-15. Kopier `rr-sendeplan-apache.conf` inn i `/etc/apache2/sites-available` (hvertfall på Debian-systemer) eller integrer den i konfigurasjonen
-    til en annen VirtualHost hvis du ønsker det, avhengig av hvor du vil ha det hen. Aktiver den konfigurasjonen, hvis du lagde ny fil (a2ensite).
-    Jeg vet dette er veldig vagt, det er best å få hjelp av noen som allerede kan litt Apache2-konfigurasjon, eller lese seg litt opp
-    på det selv. Det er ikke så _veldig_ vanskelig.
-16. Restart Apache: `sudo apache2ctl graceful` (dette vil kjøre en test på konfigurasjonen før Apache restarter, så feil i konfigurasjonen
-    ikke fører til at serveren går ned. Det vil også sørge for at ingen får sin tilkobling avbrutt.)
+14. Lag mappe for cachen i `/var/cache/nginx/sendeplan.radiorevolt.no`. Gi `nginx` skrivetilgang her.
+14. Åpne `sendeplan.radiorevolt.no.conf.template` og fyll inn manglende variabler der. Lagre som `sendeplan.radiorevolt.no.conf`.
+15. Bruk denne configen: `ln -s /sti/til/sendeplan.radiorevolt.no.conf /etc/nginx/sites-available` og `ln -s /etc/nginx/sites-available/sendeplan.radiorevolt.no.conf /etc/nginx/sites-enabled`
+16. Sjekk at configen virker: `sudo nginx -t`
+17. Ta i bruk endringene: `sudo systemctl reload nginx`
 

@@ -1,12 +1,8 @@
 #!/bin/sh
-# Fill in the missing values below
+# Fill in the missing value below
 # Path to rr-sendeplan
 RR_SENDEPLAN=<path>
-# Port to serve the sendeplan at internally (Apache connect to this in ProxyPass)
-PORT=<port>
-# Number of concurrent requests to handle (no more than 1 is really necessary)
-WORKERS=<workers>
 
 cd $RR_SENDEPLAN
 . venv/bin/activate
-gunicorn -b 127.0.0.1:$PORT -w $WORKERS --max-requests 500 --max-requests-jitter 50 sendeplan:app
+uwsgi --ini uwsgi.ini

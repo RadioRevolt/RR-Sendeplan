@@ -129,3 +129,5 @@ settings.yaml
 rr-sendeplan.conf
 rr-sendeplan.service
 start-sendeplan
+uwsgi.ini
+sendeplan.radiorevolt.no.conf
